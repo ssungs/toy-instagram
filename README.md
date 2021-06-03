@@ -21,11 +21,7 @@ requirements 를 이용한 패키지 설치
 pip install -r requirements.txt
 ```
 
-<<<<<<< HEAD
-## 기능
-=======
 ## 기능(상세내용은 구현 후 수정예정)
->>>>>>> 36241d7182e1d4ea9414939db51c5cfe85790d15
 
 ### 1. 메인페이지
 
@@ -41,6 +37,3 @@ pip install -r requirements.txt
 
 ### 7. 추가 기능 구현 (구상중)
 
-
-
-# toy-instagram
