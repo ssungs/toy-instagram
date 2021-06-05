@@ -12,6 +12,7 @@ Django를 통해 인스타그램을 만들어보기
 asgiref==3.3.4
 Django==3.2.4
 pytz==2021.1
+Pillow==8.2.0
 sqlparse==0.4.1
 ```
 
