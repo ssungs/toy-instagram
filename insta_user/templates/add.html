@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="{% url 'insta_user:add' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="image">
+  <input type="text" name="img_introduce">
+  <button type="submit">작성하기</button>
+</form>  
+{% endblock content %}

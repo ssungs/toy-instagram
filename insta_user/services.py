@@ -21,6 +21,12 @@ class LoginDto():
     userid: str
     password: str
 
+@dataclass
+class PhotoDto():
+    writer: str
+    image: str
+    img_introduce: str
+
 
 class UserService():
     @staticmethod
@@ -51,3 +57,12 @@ class UserService():
         auth_user = authenticate(username=dto.userid, password=dto.password)
         if auth_user:
             return build_success_msg(auth_user)
+
+    def add(dto: PhotoDto):
+        if (not dto.image or not dto.img_introduce):
+            return build_error_msg('MISSING_INPUT')
+            
+        user = User.objects.filter(username=dto.userid)
+        Photo.objects.create(writer=user, image=dto.image, img_introduce=dto.img_introduce)
+
+        return build_success_msg(user)

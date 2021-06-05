@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib import auth
 from django.contrib.auth.models import User
 
-from insta_user.services import LoginDto, UserService, SignupDto, LoginDto
+from insta_user.services import LoginDto, UserService, SignupDto, LoginDto, PhotoDto
 
 
 class IndexView(TemplateView):
@@ -57,3 +57,29 @@ class LoginView(View):
 def logout(request) :
     auth.logout(request)
     return redirect('index')
+
+class AddView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'add.html')
+
+    def post(self, request, *args, **kwargs):
+        photo_dto = self._build_photo_dto(request.POST)
+        result = UserService.add(photo_dto)
+        if (result['error']['state']):
+            context = { 'error': result['error']}
+            return render(request, 'add.html', context)
+
+        return redirect('mypage')
+
+    @staticmethod
+    def _build_photo_dto(post_data):
+        print(post_data)
+        return PhotoDto(
+            writer=post_data['user'],
+            image=post_data['image'],
+            img_introduce=post_data['img_introduce']
+        )
+
+class MypageView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'mypage.html')
