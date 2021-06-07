@@ -5,7 +5,7 @@
     <h1>{{user.name}} 님 안녕하세요</h1>
     <br>
     <br>
-    <a href="{% url 'insta_user:mypage' %}"></a>
+    <a href="{% url 'insta_user:mypage' user.pk %}">마이 페이지</a>
     <a href="{% url 'insta_user:add' %}">
         <button>글쓰기</button>
     </a>
@@ -13,7 +13,11 @@
     <a href="{% url 'insta_user:logout' %}">로그아웃 > </a>
     <br/>
     <br/>
-
+    {% for content in contents %}
+    <img src="{{content.image}}" alt="uploaded-image">
+    <br>
+    <div>{{content.img_introduce}}</div>
+    {% endfor %}
 {% else %}
 <a href="{% url 'insta_user:signup' %}">회원가입하러가기 > </a>
 <br/>

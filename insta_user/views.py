@@ -5,10 +5,14 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 
 from insta_user.services import LoginDto, UserService, SignupDto, LoginDto, PhotoDto
+from .models import Photo
 
+class IndexView(TemplateView, View):
+    TemplateView = 'index.html'
 
-class IndexView(TemplateView):
-    template_name = 'index.html'
+    def get(self, request, *args, **kwargs):
+        contents = Photo.objects.filter(user=request.user)
+        return render(request, 'index.html', {'contents': contents})
 
 class SignupView(View):
     def get(self, request, *args, **kwargs):
@@ -63,21 +67,20 @@ class AddView(View):
         return render(request, 'add.html')
 
     def post(self, request, *args, **kwargs):
-        photo_dto = self._build_photo_dto(request.POST)
+        photo_dto = self._build_photo_dto(request)
         result = UserService.add(photo_dto)
         if (result['error']['state']):
             context = { 'error': result['error']}
             return render(request, 'add.html', context)
-
-        return redirect('mypage')
+        return redirect('index')
 
     @staticmethod
-    def _build_photo_dto(post_data):
-        print(post_data)
+    def _build_photo_dto(request):
+        print(request.user)
         return PhotoDto(
-            writer=post_data['user'],
-            image=post_data['image'],
-            img_introduce=post_data['img_introduce']
+            userid=request.user,
+            image=request.FILES['image'],
+            img_introduce=request.POST['img_introduce']
         )
 
 class MypageView(View):
