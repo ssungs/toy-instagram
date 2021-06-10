@@ -16,10 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from insta_user.views import IndexView
+from insta_user import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', IndexView.as_view(), name='index'),
+    path('', views.IndexView, name='index'),
     path('insta_user/', include('insta_user.urls')),
 ]
