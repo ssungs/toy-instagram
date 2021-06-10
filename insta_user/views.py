@@ -1,18 +1,24 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
 from django.views import View
 from django.contrib import auth
-from django.contrib.auth.models import User
+from django.db.models import Q
 
 from insta_user.services import LoginDto, UserService, SignupDto, LoginDto, PhotoDto
-from .models import Photo
+from .models import Photo, UserProfile
 
-class IndexView(TemplateView, View):
-    TemplateView = 'index.html'
+# class IndexView(TemplateView):
+#     TemplateView = 'index.html'
+    
+#     @login_required
 
-    def get(self, request, *args, **kwargs):
+def IndexView(request):
+    if request.user.is_authenticated:
         contents = Photo.objects.filter(user=request.user)
-        return render(request, 'index.html', {'contents': contents})
+        return render(request, 'index.html', { 'contents': contents })
+    else:
+        contents = Photo.objects.all
+        return render(request, 'index.html', { 'contents':contents })
+
 
 class SignupView(View):
     def get(self, request, *args, **kwargs):
@@ -83,6 +89,20 @@ class AddView(View):
             img_introduce=request.POST['img_introduce']
         )
 
-class MypageView(View):
+class SearchView(View):
+
     def get(self, request, *args, **kwargs):
-        return render(request, 'mypage.html')
+        keyword = request.GET.get('keyword', '')
+        
+        search_user = {}
+        if keyword:
+            search_user = UserProfile.objects.filter(
+                Q(name__icontains=keyword)
+            ).first()
+        return render(request, 'search.html', { 'search_user': search_user })
+
+class UserDetailView(View):
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        user_detail = UserProfile.objects.filter(user=kwargs['pk'])
+        return render(request, 'user_detail.html', {'user_detail': user_detail})
