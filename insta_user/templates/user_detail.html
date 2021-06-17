@@ -2,8 +2,42 @@
 
 {% block content %}
 
-1123
-{{user_detail}}
-{{user_detail.imtroduce_text}}
-
+{{user.user.name}}
+<br>
+{{user.user.introduce_text}}
+<br>
+{% if request.user.pk == user.pk %}
+<a href="{% url 'insta_user:user_edit' user.pk %}">수정하기</a>
+{% else %}
+{{relationship}}
+  <form action="{% url 'insta_user:relationship' user.pk %}" method='POST'>
+    {% csrf_token %}
+    {% if request.user in user.relationship.followers.all %}
+    <button type='submit'>팔로우 취소</button>
+    {% else %}
+    <button type='submit'>팔로우</button>
+    {% endif %}
+  </form>
+<br>
+{% endif %}
+{% for content in user.writer.image.all %}
+<div style="text-align: center;">
+    <div style="text-align: left; width: 550px; margin: 0 auto; padding: 5px 23px 5px 23px; border: 1px solid gray;">
+        {{user.user.name}}</div>
+        {{user.user.writer}}
+    <br>
+    <div style="width: 600px; height: 600px; display: block; margin: 0 auto;">
+        <img src="{{ user.image.path }}" alt="uploaded-image">
+    </div>
+    <br>
+    <div style="text-align: left; width:600px; margin: 0 auto 20px auto; border-bottom: 1px solid black;">
+        <div style="margin-bottom: 10px;">{{user.img_introduce}}</div>
+        <div style="display: flex; margin-bottom: 20px;">
+            <a href="{% url 'insta_user:photo_detail' user.pk %}">댓글 쓰기</a>
+            <br>
+        </div>
+    </div>
+    <br>
+</div>
+{% endfor %}
 {% endblock content %}

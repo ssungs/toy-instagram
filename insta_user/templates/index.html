@@ -1,30 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1 style="text-align: center;">Stargram</h1>
 {% if user.is_authenticated %}
-    <h1>{{user.user.name}} 님 안녕하세요</h1>
+<div style="text-align: center; height: 100px; border-bottom: 1px solid gray; margin-bottom: 30px;">
+    <h2>{{user.user.name}} 님 안녕하세요</h2>
+    <div style="display: flex;">
+        <div style="flex-grow: 3;"></div>
+        <a href="{% url 'insta_user:search' %}" style="color: #FFF; border: 1px solid gray; background-color: gray;">검색
+            하기</a>
+        <a href="{% url 'insta_user:add' %}">
+            <button>글쓰기</button>
+        </a>
+        <br>
+        <a href="{% url 'insta_user:logout' %}">로그아웃 > </a>
+    </div>
     <br>
     <br>
-    <a href="{% url 'insta_user:search' %}">검색</a>
-    <a href="{% url 'insta_user:add' %}">
-        <button>글쓰기</button>
-    </a>
-    <br>
-    <a href="{% url 'insta_user:logout' %}">로그아웃 > </a>
-    <br/>
-    <br/>
-{% else %}
+    {% else %}
     <a href="{% url 'insta_user:signup' %}">회원가입하러가기 > </a>
-    <br/>
-    <a href="{% url 'insta_user:login' %}">로그인하기  </a>
-    <br/>
-{% endif %}
+    <br />
+    <a href="{% url 'insta_user:login' %}">로그인하기 </a>
+    <br />
+    {% endif %}
     <br>
-    {% for content in contents %}
-    <img src="/media/{{content.image.url }}" alt="uploaded-image">
+</div>
+{% for content in contents %}
+<div style="text-align: center;">
+    <div style="text-align: left; width: 550px; margin: 0 auto; padding: 5px 23px 5px 23px; border: 1px solid gray;">
+        {{content.user}}</div>
     <br>
-    {{content.image.url}}
-    <div>{{content.img_introduce}}</div>
-    {% endfor %}
+    <div style="width: 600px; height: 600px; display: block; margin: 0 auto;">
+        <img src="{{ content.image.path }}" alt="uploaded-image">
+    </div>
+    <br>
+    <div style="text-align: left; width:600px; margin: 0 auto 20px auto; border-bottom: 1px solid black;">
+        <div style="margin-bottom: 10px;">{{content.img_introduce}}</div>
+        <div style="display: flex; margin-bottom: 20px;">
+            <a href="{% url 'insta_user:photo_detail' content.pk %}">댓글 쓰기</a>
+            <br>
+        </div>
+        <form action="{% url 'insta_user:like' content.pk %}" method="POST">
+            {% csrf_token %}
+            {% if request.user in content.like.user.all %}
+            <button type="submit">좋아요 취소</button>
+            {% else %}
+            <button type="submit">좋아요</button>
+            {% endif %}
+        </form>
+    </div>
+    <br>
+</div>
+{% endfor %}
 
 {% endblock content %}

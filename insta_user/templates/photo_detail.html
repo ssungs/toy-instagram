@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if request.user == user %}
+<a href="{% url 'insta_user:photo_edit' user.pk %}">수정하기</a>
+{% endif %}
+<div style="text-align: center;">
+    <div style="text-align: left; width: 550px; margin: 0 auto; padding: 5px 23px 5px 23px; border: 1px solid gray;">
+        {{user}}</div>
+    <br>
+    <div style="width: 600px; height: 600px; display: block; margin: 0 auto;">
+        <img src="{{ content.image.path }}" alt="uploaded-image">
+    </div>
+    <br>
+    <div style="text-align: left; width:600px; margin: 0 auto 20px auto; border-bottom: 1px solid black;">
+        <div style="margin-bottom: 10px;">{{content.img_introduce}}</div>
+<h2>댓글 작성하기</h2>
+    <form action="{% url 'insta_user:photo_detail' photo.pk %}" method="POST">
+        {% csrf_token %}
+        <input type='text' placeholder='comment' name='content'>
+        <button type='submit'>작성하기</button>
+    </form>
+    {% for comment in user.my_comment.all %}
+    {{comment.writer.user.name}} : {{comment.content}}  
+    <br/> <br/> 
+    {% endfor %}
+{% endblock content %}
