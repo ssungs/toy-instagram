@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>사진 수정하기</h1>
+    <form action="{% url 'insta_user:photo_edit' user.user.pk %}" method="POST" >
+        {% csrf_token %}
+        <input type='text' placeholder="이름" value={{user.user.name}} name="name"  />
+        <br/><br/>
+        <textarea name="introduce_text" >{{user.user.introduce_text}}</textarea>
+        <br/><br/>
+        <button type="submit">수정하기</button>
+    </form>
+{% endblock content %}

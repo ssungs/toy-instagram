@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>유저 검색하기</h1>
+<br>
 <form action="{% url 'insta_user:search' %}" method="GET">
   {% csrf_token %}
   <input type="text" name="keyword">
@@ -9,6 +11,6 @@
 <br>
 <br>
 {% if search_user %}
-<a href="{% url 'insta_user:user_detail' search_user.pk %}">{{search_user.name}}</a>
+<a href="{% url 'insta_user:user_detail' solved_pk %}">{{search_user.name}}</a>
 {% endif %}
 {% endblock content %}
