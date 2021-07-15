@@ -10,3 +10,5 @@ def build_error_msg(msg):
 
 def build_success_msg(data):
     return { 'error': { 'state': False }, 'data': data }
+
+print('hello')
